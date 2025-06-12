@@ -1,0 +1,40 @@
+//MAXIMUM BRIDGE USING RECURSION WITH TMEMOIZATION
+public class MaxBridgeRecMemo {
+    public static int maximumBridges(int[] a, int[] b, int n, int m) {
+        int[][] dp = new int[n + 1][m + 1];
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                dp[i][j] = -1;
+            }
+        }
+        return lcsMemo(a, b, n, m, dp);
+    }
+    private static int lcsMemo(int[] a, int[] b, int n, int m, int[][] dp) {
+        if (n == 0 || m == 0) {
+            return 0;
+        }
+
+        if (dp[n][m] != -1) {
+            return dp[n][m];
+        }
+
+        if (a[n - 1] == b[m - 1]) {
+            dp[n][m] = 1 + lcsMemo(a, b, n - 1, m - 1, dp);
+        } else {
+            dp[n][m] = Math.max(
+                lcsMemo(a, b, n - 1, m, dp),
+                lcsMemo(a, b, n, m - 1, dp)
+            );
+        }
+
+        return dp[n][m];
+    }
+
+    public static void main(String[] args) {
+        int[] a = {1, 2, 2, 2, 1, 2};
+        int[] b = {1, 2, 1, 2, 2, 1, 2, 2};
+
+        int result = maximumBridges(a, b, a.length, b.length);
+        System.out.println(result + " ways to have bridges between a and b");
+    }
+}
